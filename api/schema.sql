@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS measurements (
 INSERT INTO companies (id, name, tax_id, service_status) VALUES ('SEL-001', 'Agrícola del Valle', '76.123.456-K', 'active');
 
 -- Note: Password is 'admindemo' hashed with PASSWORD_DEFAULT (bcrypt)
--- Using a sample hash for 'admindemo': $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
+-- Hash for 'admindemo': $2y$10$6xps20ZJ944wYpUD4jqntOZZVg0GVXu4/5jzwuMgKW5azOkcBhQQm
 INSERT INTO users (id, username, password_hash, full_name, role, active) 
-VALUES ('1', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador Global', 'admin', 1);
+VALUES ('1', 'admin', '$2y$10$NHordUeK3o1OgXMXmcYP4OZmjTqQmJDzgAcXBM7AmiM2Fo/h2WQ9m', 'Administrador Global', 'admin', 1);
 
 INSERT INTO users (id, username, password_hash, full_name, role, company_id, active) 
-VALUES ('2', 'juan.perez', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Juan Pérez', 'client', 'SEL-001', 1);
+VALUES ('2', 'juan.perez', '$2y$10$NHordUeK3o1OgXMXmcYP4OZmjTqQmJDzgAcXBM7AmiM2Fo/h2WQ9m', 'Juan Pérez', 'client', 'SEL-001', 1);
