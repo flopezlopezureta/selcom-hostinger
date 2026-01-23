@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'zekton';
+    src: url('https://db.onlinewebfonts.com/t/93fef76e0e9dcf9d288cc4db765068f3.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zekton';
+    src: url('https://db.onlinewebfonts.com/t/93fef76e0e9dcf9d288cc4db765068f3.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --primary: #06b6d4;
+    --primary-glow: rgba(6, 182, 212, 0.4);
+}
+
+body {
+    @apply bg-[#020617] text-slate-200 antialiased min-h-screen;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+.brand-logo {
+    font-family: 'Zekton', sans-serif;
+    @apply tracking-wider uppercase font-bold;
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+    @apply bg-slate-900/50 backdrop-blur-md border border-slate-800/50;
+}
+
+.glass-card {
+    @apply bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 hover:border-cyan-500/30 transition-all duration-300;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
