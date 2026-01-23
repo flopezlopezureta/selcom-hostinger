@@ -34,7 +34,10 @@ jobs:
           local-dir: ./dist/
           server-dir: ./public_html/
           protocol: ftp
+          clean: true
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
+            **/api/**
+            cleanup.php
