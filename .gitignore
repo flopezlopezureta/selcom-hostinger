@@ -13,6 +13,8 @@ node_modules
 # Environment variables (CRITICAL - NO SUBIR A GIT)
 .env
 api/.env
+public/api/.env
+public/api/.env.local
 
 # Editor directories and files
 .vscode/*
