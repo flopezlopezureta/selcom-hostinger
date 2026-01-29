@@ -5,8 +5,8 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once 'db.php';
 
 try {
-    $database = new Database();
-    $db = $database->getConnection();
+    // 0. Connect using getDB() from db.php (it doesn't have a Database class)
+    $db = getDB();
 
     // 1. Add columns to 'devices'
     echo "<h2>Updating 'devices' table...</h2>";
