@@ -31,7 +31,8 @@ if (file_exists('index.html')) {
 $foldersToDelete = [
     'components',
     'services',
-    'node_modules'
+    'node_modules',
+    '.git'
 ];
 
 echo "<h2>Limpieza de Selcom IoT Hub</h2>";
