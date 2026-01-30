@@ -96,6 +96,9 @@ try {
 
         case 'add_device':
             $data = getRequestData();
+            if (empty($data['mac_address'])) {
+                throw new Exception('La dirección MAC/ID Físico es obligatoria');
+            }
             $id = uniqid('dev_');
             $stmt = $db->prepare("INSERT INTO devices (id, name, mac_address, type, unit, last_value, company_id, hardware_config, model_variant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([
@@ -139,6 +142,9 @@ try {
                 $params[] = $data['name'];
             }
             if (isset($data['mac_address'])) {
+                if (empty($data['mac_address'])) {
+                    throw new Exception('El ID Físico (MAC) no puede estar vacío');
+                }
                 $updateFields[] = "mac_address=?";
                 $params[] = $data['mac_address'];
             }
@@ -228,6 +234,42 @@ try {
             $stmt = $db->prepare("DELETE FROM devices WHERE id = ?");
             $stmt->execute([$id]);
             echo json_encode(['success' => true]);
+            break;
+
+        case 'insert_measurement':
+            $data = getRequestData();
+            $device_id = $data['device_id'] ?? '';
+            $mac_address = $data['mac_address'] ?? '';
+            $value = $data['value'] ?? null;
+
+            if ($value === null) {
+                throw new Exception('Valor de medición requerido');
+            }
+
+            // Si se provee MAC, buscar el device_id
+            if (empty($device_id) && !empty($mac_address)) {
+                $stmt = $db->prepare("SELECT id FROM devices WHERE mac_address = ?");
+                $stmt->execute([$mac_address]);
+                $device = $stmt->fetch();
+                if (!$device) {
+                    throw new Exception('Dispositivo no encontrado con esa MAC');
+                }
+                $device_id = $device['id'];
+            }
+
+            if (empty($device_id)) {
+                throw new Exception('ID de dispositivo o MAC requerida');
+            }
+
+            // 1. Insertar la medición
+            $stmt = $db->prepare("INSERT INTO measurements (device_id, value) VALUES (?, ?)");
+            $stmt->execute([$device_id, (float) $value]);
+
+            // 2. Actualizar el último valor en la tabla de dispositivos para vista rápida
+            $stmtU = $db->prepare("UPDATE devices SET last_value = ?, status = 'online' WHERE id = ?");
+            $stmtU->execute([(float) $value, $device_id]);
+
+            echo json_encode(['success' => true, 'device_id' => $device_id]);
             break;
 
         // --- EMPRESAS ---

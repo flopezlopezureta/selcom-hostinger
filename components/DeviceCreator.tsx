@@ -116,9 +116,16 @@ const DeviceCreator: React.FC<DeviceCreatorProps> = ({ onSuccess, onCancel, comp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const mac = formData.mac_address.trim().toUpperCase();
+    if (!mac) {
+      alert("El ID Físico (MAC) es obligatorio para vincular el dispositivo.");
+      return;
+    }
+
     const config = {
       name: formData.name,
-      mac_address: formData.mac_address,
+      mac_address: mac,
       company_id: formData.company_id,
       type: formData.sensor,
       unit: formData.unit,
@@ -168,8 +175,16 @@ const DeviceCreator: React.FC<DeviceCreatorProps> = ({ onSuccess, onCancel, comp
                 <input required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white outline-none focus:ring-1 focus:ring-cyan-500" placeholder="Ej: Sensor Nivel Estanque 04" />
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2">ID Físico (MAC / IMEI)</label>
-                <input required value={formData.mac_address} onChange={e => setFormData({ ...formData, mac_address: e.target.value })} className="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white font-mono" placeholder="7C:9E:BD:..." />
+                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2">
+                  ID Físico (MAC / IMEI) <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  required
+                  value={formData.mac_address}
+                  onChange={e => setFormData({ ...formData, mac_address: e.target.value.toUpperCase() })}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-5 py-3 text-white font-mono focus:border-rose-500/50 outline-none transition-all"
+                  placeholder="Ej: 7C:9E:BD:01:02:03"
+                />
               </div>
               <div>
                 <label className="block text-[10px] font-black uppercase text-slate-500 mb-2">Asignar a Cliente</label>
