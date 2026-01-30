@@ -35,3 +35,4 @@ ENVIRONMENT=production
 
 ---
 🚀 **Selcom IoT Hub está listo para producción.**
+_Última actualización de despliegue: 30-01-2026_
