@@ -5,6 +5,8 @@ import { generateIoTCode } from '../services/geminiService';
 import { databaseService } from '../services/databaseService';
 import CodeViewer from './CodeViewer';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceLine } from 'recharts';
+import Gauge from './Gauge';
+
 
 interface DeviceDetailProps {
   device: Device;
@@ -177,72 +179,64 @@ const DeviceDetail: React.FC<DeviceDetailProps> = ({ device, onBack, onRefresh }
       {activeTab === 'monitoring' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-            <div className="bg-[#1e293b] rounded-[1.5rem] sm:rounded-[2rem] border border-slate-800/40 p-4 sm:p-8 shadow-2xl relative overflow-visible">
-              <div className="flex flex-col sm:flex-row justify-between items-start mb-6 sm:mb-10 gap-4">
-                <div className="w-full sm:w-auto">
+            <div className="bg-[#1e293b] rounded-[2rem] border border-slate-800/40 p-10 shadow-2xl relative overflow-hidden group">
+              <div className="flex justify-between items-start mb-10">
+                <div>
                   <div className="flex items-center gap-3 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <h3 className="text-white font-bold text-xs sm:text-sm tracking-widest uppercase">Telemetría Live</h3>
+                    <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span>
+                    <h3 className="text-white font-black text-xs tracking-[0.3em] uppercase">Mecanismo de Telemetría Real-Time</h3>
                   </div>
-                  <p className="text-slate-400 text-[9px] sm:text-[11px] font-bold uppercase">Mueva las líneas rojas para fijar límites</p>
+                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Estado analógico sincronizado</p>
                 </div>
-                <div className="flex items-baseline gap-1 bg-slate-900 px-4 py-3 sm:px-6 sm:py-4 rounded-2xl border-2 border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.2)] self-end sm:self-auto">
-                  <span className={`text-3xl sm:text-4xl lg:text-5xl font-black tabular-nums ${isOutOfRange ? 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]' : maintenanceMode ? 'text-amber-400' : 'text-cyan-400'}`}>
-                    {displayedValue.toFixed(2)}
-                  </span>
-                  <span className="text-white text-[10px] sm:text-sm font-black uppercase ml-1">{device.unit}</span>
+                <div className="text-right">
+                  <p className="text-slate-500 text-[10px] font-black uppercase mb-1">Última Señal</p>
+                  <p className="text-white font-mono text-sm font-bold">{dataPoints.length > 0 ? dataPoints[dataPoints.length - 1].time : '--:--:--'}</p>
                 </div>
               </div>
 
-              <div className="flex gap-2 sm:gap-4 h-[300px]">
-                <div className="flex-1 min-w-0 bg-slate-900/40 rounded-xl border border-slate-700/30 p-4">
+              <div className="flex flex-col md:flex-row items-center justify-around gap-12 py-6">
+                <Gauge
+                  value={displayedValue}
+                  min={minThreshold}
+                  max={maxThreshold}
+                  unit={device.unit}
+                  size={240}
+                />
+
+                <div className="flex-1 w-full h-[240px] bg-slate-900/40 rounded-[2rem] border border-slate-700/30 p-6 overflow-hidden">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={dataPoints}>
                       <defs>
                         <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+                          <stop offset="5%" stopColor={isOutOfRange ? "#f43f5e" : "#22d3ee"} stopOpacity={0.4} />
+                          <stop offset="95%" stopColor={isOutOfRange ? "#f43f5e" : "#22d3ee"} stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} vertical={false} />
-                      <XAxis
-                        dataKey="time"
-                        stroke="#94a3b8"
-                        tick={{ fontSize: 10, fontWeight: 'bold' }}
-                        tickLine={false}
-                        axisLine={false}
-                        interval="preserveStartEnd"
-                      />
-                      <YAxis
-                        stroke="#94a3b8"
-                        tick={{ fontSize: 10, fontWeight: 'bold' }}
-                        tickLine={false}
-                        axisLine={false}
-                        domain={['auto', 'auto']}
-                      />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.15} vertical={false} />
+                      <XAxis hide dataKey="time" />
+                      <YAxis hide domain={['auto', 'auto']} />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#22d3ee', borderRadius: '1rem', color: '#fff', boxShadow: '0 10px 30px -10px rgba(34, 211, 238, 0.4)' }}
-                        itemStyle={{ color: '#22d3ee', fontWeight: 'black', textTransform: 'uppercase', fontSize: '11px' }}
-                        labelStyle={{ color: '#94a3b8', fontSize: '10px', marginBottom: '0.5rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}
-                        cursor={{ stroke: '#22d3ee', strokeWidth: 1, strokeDasharray: '4 4' }}
+                        contentStyle={{ backgroundColor: '#0f172a', borderColor: isOutOfRange ? '#f43f5e' : '#22d3ee', borderRadius: '1.5rem', color: '#fff', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)' }}
+                        itemStyle={{ color: isOutOfRange ? '#f43f5e' : '#22d3ee', fontWeight: 'black', textTransform: 'uppercase', fontSize: '11px' }}
+                        labelStyle={{ display: 'none' }}
+                        cursor={{ stroke: isOutOfRange ? '#f43f5e' : '#22d3ee', strokeWidth: 1, strokeDasharray: '4 4' }}
                       />
-                      <ReferenceLine y={maxThreshold} label={{ value: 'MAX', fill: '#f43f5e', fontSize: 10, fontWeight: 'bold' }} stroke="#f43f5e" strokeDasharray="3 3" />
-                      <ReferenceLine y={minThreshold} label={{ value: 'MIN', fill: '#f43f5e', fontSize: 10, fontWeight: 'bold' }} stroke="#f43f5e" strokeDasharray="3 3" />
                       <Area
                         type="monotone"
                         dataKey="value"
-                        stroke="#22d3ee"
+                        stroke={isOutOfRange ? "#f43f5e" : "#22d3ee"}
                         strokeWidth={3}
-                        fillOpacity={1}
                         fill="url(#colorVal)"
-                        animationDuration={1000}
+                        animationDuration={1500}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
+                  <p className="text-center text-[8px] font-black text-slate-600 uppercase tracking-widest mt-2 italic">Tendencia de los últimos 20 reportes</p>
                 </div>
               </div>
             </div>
           </div>
+
 
           <div className="space-y-6">
             <div className="bg-[#1e293b] rounded-[1.5rem] sm:rounded-[2rem] border border-slate-800/40 p-6 sm:p-8 shadow-2xl">
