@@ -5,16 +5,15 @@ import ProfileSettings from './ProfileSettings';
 
 interface SettingsProps {
     user: User;
+    dashboardMode: 'normal' | 'grafana';
+    onModeChange: (mode: 'normal' | 'grafana') => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ user }) => {
+const Settings: React.FC<SettingsProps> = ({ user, dashboardMode, onModeChange }) => {
     const [activeTab, setActiveTab] = useState<'security' | 'display'>('security');
-    const [dashboardMode, setDashboardMode] = useState<'normal' | 'grafana'>(() => {
-        return (localStorage.getItem('selcom_dashboard_mode') as 'normal' | 'grafana') || 'normal';
-    });
 
     const handleModeChange = (mode: 'normal' | 'grafana') => {
-        setDashboardMode(mode);
+        onModeChange(mode);
         localStorage.setItem('selcom_dashboard_mode', mode);
         // Podemos disparar un evento o simplemente confiar en que el usuario refrescará/navegará
     };
@@ -30,8 +29,8 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
                 <button
                     onClick={() => setActiveTab('security')}
                     className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'security'
-                            ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-900/20'
-                            : 'text-slate-500 hover:text-slate-300'
+                        ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-900/20'
+                        : 'text-slate-500 hover:text-slate-300'
                         }`}
                 >
                     Seguridad de Acceso
@@ -39,8 +38,8 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
                 <button
                     onClick={() => setActiveTab('display')}
                     className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'display'
-                            ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-900/20'
-                            : 'text-slate-500 hover:text-slate-300'
+                        ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-900/20'
+                        : 'text-slate-500 hover:text-slate-300'
                         }`}
                 >
                     Preferencias de Vista
@@ -68,8 +67,8 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
                             <button
                                 onClick={() => handleModeChange('normal')}
                                 className={`p-8 rounded-[2rem] border-2 transition-all text-left flex flex-col gap-4 group ${dashboardMode === 'normal'
-                                        ? 'border-cyan-500 bg-cyan-500/5'
-                                        : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                                    ? 'border-cyan-500 bg-cyan-500/5'
+                                    : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
                                     }`}
                             >
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${dashboardMode === 'normal' ? 'bg-cyan-500 text-white' : 'bg-slate-800 text-slate-500'
@@ -90,8 +89,8 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
                             <button
                                 onClick={() => handleModeChange('grafana')}
                                 className={`p-8 rounded-[2rem] border-2 transition-all text-left flex flex-col gap-4 group ${dashboardMode === 'grafana'
-                                        ? 'border-orange-500 bg-orange-500/5'
-                                        : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                                    ? 'border-orange-500 bg-orange-500/5'
+                                    : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
                                     }`}
                             >
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${dashboardMode === 'grafana' ? 'bg-orange-500 text-white' : 'bg-slate-800 text-slate-500'

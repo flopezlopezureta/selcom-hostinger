@@ -25,6 +25,9 @@ const App: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [lastUpdates, setLastUpdates] = useState<Record<string, number>>({});
+  const [dashboardMode, setDashboardMode] = useState<'normal' | 'grafana'>(() => {
+    return (localStorage.getItem('selcom_dashboard_mode') as 'normal' | 'grafana') || 'normal';
+  });
 
   const refreshData = useCallback(async () => {
     if (currentUser) {
@@ -117,6 +120,7 @@ const App: React.FC = () => {
           <Dashboard
             user={currentUser}
             devices={devices}
+            mode={dashboardMode}
             onSelectDevice={(d) => {
               setSelectedDevice(d);
               setViewMode('device-detail');
@@ -179,7 +183,7 @@ const App: React.FC = () => {
         );
       case 'create-device': return <DeviceCreator editDevice={selectedDevice} companies={companies} onCancel={() => setViewMode('devices')} onSuccess={() => { refreshData(); setViewMode('devices'); }} />;
       case 'device-detail': return activeSelectedDevice ? <DeviceDetail device={activeSelectedDevice} onBack={() => { setViewMode('devices'); setSelectedDevice(null); }} onRefresh={refreshData} /> : null;
-      case 'settings': return <Settings user={currentUser} />;
+      case 'settings': return <Settings user={currentUser} dashboardMode={dashboardMode} onModeChange={setDashboardMode} />;
       case 'profile': return <ProfileSettings user={currentUser} />;
       default: return <Dashboard user={currentUser} devices={devices} onSelectDevice={(d) => { setSelectedDevice(d); setViewMode('device-detail'); }} />;
     }
