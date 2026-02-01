@@ -174,7 +174,12 @@ const DeviceDetail: React.FC<DeviceDetailProps> = ({ device, mode = 'normal', on
           </button>
           <div className="overflow-hidden">
             <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight truncate">{device.name}</h2>
-            <p className="text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] truncate">MAC: {device.mac_address}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] truncate">MAC: {device.mac_address}</p>
+              <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${mode === 'grafana' ? 'bg-orange-500/20 text-orange-400' : 'bg-cyan-500/20 text-cyan-400'}`}>
+                Modo: {mode}
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex bg-slate-900 p-1 rounded-2xl border border-slate-800 overflow-x-auto shadow-inner no-scrollbar">
