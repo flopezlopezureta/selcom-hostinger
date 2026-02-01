@@ -210,13 +210,25 @@ const DeviceDetail: React.FC<DeviceDetailProps> = ({ device, mode = 'normal', on
               </div>
 
               <div className="flex flex-col md:flex-row items-center justify-around gap-12 py-6">
-                <Gauge
-                  value={displayedValue}
-                  min={minThreshold}
-                  max={maxThreshold}
-                  unit={device.unit}
-                  size={240}
-                />
+                {mode === 'grafana' ? (
+                  <Gauge
+                    value={displayedValue}
+                    min={minThreshold}
+                    max={maxThreshold}
+                    unit={device.unit}
+                    size={240}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-8 bg-slate-900/40 rounded-[2.5rem] border border-slate-700/20 min-w-[240px]">
+                    <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Valor Actual</span>
+                    <div className="flex items-baseline gap-3">
+                      <span className={`text-7xl font-black brand-logo tracking-tighter tabular-nums ${isOutOfRange ? 'text-rose-500' : 'text-cyan-400'}`}>
+                        {displayedValue.toFixed(1)}
+                      </span>
+                      <span className="text-slate-500 text-sm font-bold uppercase">{device.unit}</span>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex-1 w-full h-[240px] bg-slate-900/40 rounded-[2rem] border border-slate-700/30 p-6 overflow-hidden">
                   <ResponsiveContainer width="100%" height="100%">
