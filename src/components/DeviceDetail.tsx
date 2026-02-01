@@ -10,13 +10,14 @@ import Gauge from './Gauge';
 
 interface DeviceDetailProps {
   device: Device;
+  mode?: 'normal' | 'grafana';
   onBack: () => void;
   onRefresh: () => void;
 }
 
 type TabType = 'monitoring' | 'history' | 'audit' | 'firmware' | 'troubleshooting' | 'controls';
 
-const DeviceDetail: React.FC<DeviceDetailProps> = ({ device, onBack, onRefresh }) => {
+const DeviceDetail: React.FC<DeviceDetailProps> = ({ device, mode = 'normal', onBack, onRefresh }) => {
   const [activeTab, setActiveTab] = useState<TabType>('monitoring');
   const [dataPoints, setDataPoints] = useState<{ value: number; time: string; date: string; timestamp: number }[]>([]);
 
@@ -193,7 +194,7 @@ const DeviceDetail: React.FC<DeviceDetailProps> = ({ device, onBack, onRefresh }
       {activeTab === 'monitoring' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-            <div className="bg-[#1e293b] rounded-[2rem] border border-slate-800/40 p-10 shadow-2xl relative overflow-hidden group">
+            <div className={`rounded-[2rem] border p-10 shadow-2xl relative overflow-hidden group transition-all duration-700 ${mode === 'grafana' ? 'bg-[#0f172a] border-slate-700' : 'bg-[#1e293b] border-slate-800/40'}`}>
               <div className="flex justify-between items-start mb-10">
                 <div>
                   <div className="flex items-center gap-3 mb-1">

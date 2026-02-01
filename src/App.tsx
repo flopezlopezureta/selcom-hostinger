@@ -118,6 +118,7 @@ const App: React.FC = () => {
       case 'dashboard':
         return (
           <Dashboard
+            key={`dashboard-${dashboardMode}`}
             user={currentUser}
             devices={devices}
             mode={dashboardMode}
@@ -149,40 +150,21 @@ const App: React.FC = () => {
                 <p className="text-slate-500 text-xs font-black uppercase tracking-[0.3em]">No se encontraron dispositivos vinculados</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {devices.map(d => (
-                  <div key={d.id} className="bg-[#1e293b] p-6 rounded-[2rem] border border-slate-800/50 flex flex-col gap-6 group hover:border-cyan-500/30 transition-all">
-                    <div className="flex justify-between items-start">
-                      <div className="flex gap-4">
-                        <div className="p-3 bg-slate-900 rounded-2xl text-cyan-400 border border-slate-800"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
-                        <div>
-                          <h4 className="text-white font-bold uppercase text-sm tracking-tight">{d.name}</h4>
-                          <p className="text-slate-500 text-[9px] uppercase font-black tracking-widest">{d.mac_address}</p>
-                        </div>
-                      </div>
-                      <span className={`w-2.5 h-2.5 rounded-full ${d.status === 'online' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-700'}`}></span>
-                    </div>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-white text-4xl font-black tracking-tighter tabular-nums">{d.value.toFixed(2)}</span>
-                      <span className="text-slate-500 text-xs font-bold uppercase">{d.unit}</span>
-                    </div>
-                    <div className="flex gap-2 pt-4 border-t border-slate-800/50">
-                      <button onClick={() => { setSelectedDevice(d); setViewMode('device-detail'); }} className="flex-1 py-2 bg-cyan-600/10 text-cyan-400 rounded-xl text-[9px] font-black uppercase hover:bg-cyan-600 hover:text-white transition-all">Ver Live</button>
-                      {currentUser.role === 'admin' && (
-                        <>
-                          <button onClick={() => handleDeviceAction(d.id, 'edit')} className="px-4 py-2 bg-slate-800 text-slate-400 rounded-xl text-[9px] font-black uppercase hover:text-white transition-all">Editar</button>
-                          <button onClick={() => handleDeviceAction(d.id, 'delete')} className="px-3 py-2 bg-rose-500/10 text-rose-400 rounded-xl text-[9px] font-black uppercase hover:bg-rose-500 hover:text-white transition-all">X</button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Dashboard
+                key={`devices-${dashboardMode}`}
+                user={currentUser}
+                devices={devices}
+                mode={dashboardMode}
+                onSelectDevice={(d) => {
+                  setSelectedDevice(d);
+                  setViewMode('device-detail');
+                }}
+              />
             )}
           </div>
         );
       case 'create-device': return <DeviceCreator editDevice={selectedDevice} companies={companies} onCancel={() => setViewMode('devices')} onSuccess={() => { refreshData(); setViewMode('devices'); }} />;
-      case 'device-detail': return activeSelectedDevice ? <DeviceDetail device={activeSelectedDevice} onBack={() => { setViewMode('devices'); setSelectedDevice(null); }} onRefresh={refreshData} /> : null;
+      case 'device-detail': return activeSelectedDevice ? <DeviceDetail device={activeSelectedDevice} mode={dashboardMode} onBack={() => { setViewMode('devices'); setSelectedDevice(null); }} onRefresh={refreshData} /> : null;
       case 'settings': return <Settings user={currentUser} dashboardMode={dashboardMode} onModeChange={setDashboardMode} />;
       case 'profile': return <ProfileSettings user={currentUser} />;
       default: return <Dashboard user={currentUser} devices={devices} mode={dashboardMode} onSelectDevice={(d) => { setSelectedDevice(d); setViewMode('device-detail'); }} />;
