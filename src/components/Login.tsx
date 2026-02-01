@@ -93,7 +93,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
           <div className="mt-8 text-center space-y-2">
             <p className="text-slate-500 text-[10px] uppercase font-bold tracking-[0.2em]">
-              By Selcom Ltda
+              2026 By Selcom Ltda
             </p>
             <p className="text-slate-600 text-[9px] font-medium tracking-widest opacity-50">
               Version 1.0.2

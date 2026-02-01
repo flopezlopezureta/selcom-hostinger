@@ -8,6 +8,7 @@ import CompanyCreator from './components/CompanyCreator';
 import Login from './components/Login';
 import CompanyManager from './components/CompanyManager';
 import UserManager from './components/UserManager';
+import ProfileSettings from './components/ProfileSettings';
 import { ViewMode, Device, User, Company } from './types';
 import { databaseService } from './services/databaseService';
 
@@ -177,6 +178,7 @@ const App: React.FC = () => {
         );
       case 'create-device': return <DeviceCreator editDevice={selectedDevice} companies={companies} onCancel={() => setViewMode('devices')} onSuccess={() => { refreshData(); setViewMode('devices'); }} />;
       case 'device-detail': return activeSelectedDevice ? <DeviceDetail device={activeSelectedDevice} onBack={() => { setViewMode('devices'); setSelectedDevice(null); }} onRefresh={refreshData} /> : null;
+      case 'profile': return <ProfileSettings user={currentUser} />;
       default: return <Dashboard user={currentUser} devices={devices} onSelectDevice={(d) => { setSelectedDevice(d); setViewMode('device-detail'); }} />;
     }
   };

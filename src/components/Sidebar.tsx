@@ -32,6 +32,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, userRole, companyId, onV
       items.push({ id: 'users', label: 'Gestión Usuarios', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' });
     }
 
+    items.push({ id: 'profile', label: 'Seguridad Acceso', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' });
+
     return items;
   };
 
@@ -66,8 +68,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, userRole, companyId, onV
               key={item.id}
               onClick={() => handleItemClick(item.id)}
               className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all duration-200 group ${currentView === item.id
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                  : 'text-slate-500 hover:bg-slate-800/40 hover:text-slate-300 border border-transparent'
+                ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
+                : 'text-slate-500 hover:bg-slate-800/40 hover:text-slate-300 border border-transparent'
                 }`}
             >
               <svg
