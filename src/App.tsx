@@ -185,7 +185,7 @@ const App: React.FC = () => {
       case 'device-detail': return activeSelectedDevice ? <DeviceDetail device={activeSelectedDevice} onBack={() => { setViewMode('devices'); setSelectedDevice(null); }} onRefresh={refreshData} /> : null;
       case 'settings': return <Settings user={currentUser} dashboardMode={dashboardMode} onModeChange={setDashboardMode} />;
       case 'profile': return <ProfileSettings user={currentUser} />;
-      default: return <Dashboard user={currentUser} devices={devices} onSelectDevice={(d) => { setSelectedDevice(d); setViewMode('device-detail'); }} />;
+      default: return <Dashboard user={currentUser} devices={devices} mode={dashboardMode} onSelectDevice={(d) => { setSelectedDevice(d); setViewMode('device-detail'); }} />;
     }
   };
 

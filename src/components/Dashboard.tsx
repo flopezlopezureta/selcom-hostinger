@@ -81,27 +81,29 @@ const Dashboard: React.FC<DashboardProps> = ({ user, devices, mode = 'normal', o
 
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      {/* Stat Bar Inspired by Grafana Header */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div className="bg-slate-900/60 border-l-4 border-cyan-500 p-6 rounded-2xl shadow-xl">
-          <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Activos Monitoreados</p>
-          <p className="text-white text-3xl font-black brand-logo">{stats.total}</p>
+      {/* Stat Bar Inspired by Grafana Header - Only shown in Grafana mode or as requested */}
+      {mode === 'grafana' && (
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="bg-slate-900/60 border-l-4 border-cyan-500 p-6 rounded-2xl shadow-xl">
+            <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Activos Monitoreados</p>
+            <p className="text-white text-3xl font-black brand-logo">{stats.total}</p>
+          </div>
+          <div className="bg-slate-900/60 border-l-4 border-emerald-500 p-6 rounded-2xl shadow-xl">
+            <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Online (Heartbeat)</p>
+            <p className="text-emerald-400 text-3xl font-black brand-logo">{stats.online}</p>
+          </div>
+          <div className="bg-slate-900/60 border-l-4 border-rose-500 p-6 rounded-2xl shadow-xl">
+            <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Alarmas Críticas</p>
+            <p className="text-rose-400 text-3xl font-black brand-logo">
+              {devices.filter(d => d.value < (d.thresholds?.min ?? 20) || d.value > (d.thresholds?.max ?? 80)).length.toString().padStart(2, '0')}
+            </p>
+          </div>
+          <div className="hidden lg:block bg-slate-900/60 border-l-4 border-amber-500 p-6 rounded-2xl shadow-xl">
+            <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Uptime Global</p>
+            <p className="text-amber-400 text-3xl font-black brand-logo">99.8%</p>
+          </div>
         </div>
-        <div className="bg-slate-900/60 border-l-4 border-emerald-500 p-6 rounded-2xl shadow-xl">
-          <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Online (Heartbeat)</p>
-          <p className="text-emerald-400 text-3xl font-black brand-logo">{stats.online}</p>
-        </div>
-        <div className="bg-slate-900/60 border-l-4 border-rose-500 p-6 rounded-2xl shadow-xl">
-          <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Alarmas Críticas</p>
-          <p className="text-rose-400 text-3xl font-black brand-logo">
-            {devices.filter(d => d.value < (d.thresholds?.min ?? 20) || d.value > (d.thresholds?.max ?? 80)).length.toString().padStart(2, '0')}
-          </p>
-        </div>
-        <div className="hidden lg:block bg-slate-900/60 border-l-4 border-amber-500 p-6 rounded-2xl shadow-xl">
-          <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Uptime Global</p>
-          <p className="text-amber-400 text-3xl font-black brand-logo">99.8%</p>
-        </div>
-      </div>
+      )}
 
       <div className="space-y-6">
         <div className="flex items-center justify-between">
