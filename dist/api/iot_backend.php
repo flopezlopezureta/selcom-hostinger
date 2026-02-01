@@ -405,6 +405,33 @@ try {
             }
             break;
 
+        // --- ACTUALIZACIÓN DE SCHEMA ---
+        case 'run_updates':
+            $msgs = [];
+            try {
+                $db->exec("ALTER TABLE devices ADD COLUMN actuators JSON AFTER hardware_config");
+                $msgs[] = "Column actuators added";
+            } catch (Exception $e) {
+                $msgs[] = "actuators: " . $e->getMessage();
+            }
+
+            try {
+                $db->exec("ALTER TABLE devices ADD COLUMN actuator_states JSON AFTER actuators");
+                $msgs[] = "Column actuator_states added";
+            } catch (Exception $e) {
+                $msgs[] = "actuator_states: " . $e->getMessage();
+            }
+
+            try {
+                $db->exec("ALTER TABLE devices ADD COLUMN thresholds JSON AFTER actuator_states");
+                $msgs[] = "Column thresholds added";
+            } catch (Exception $e) {
+                $msgs[] = "thresholds: " . $e->getMessage();
+            }
+
+            echo json_encode(['success' => true, 'messages' => $msgs]);
+            break;
+
         default:
             http_response_code(404);
             echo json_encode(['error' => 'Acción no encontrada']);
